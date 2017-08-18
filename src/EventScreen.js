@@ -2,21 +2,63 @@ import React, { Component } from 'react'
 import {
   View,
   Text,
+  TouchableOpacity,
   StyleSheet,
 } from 'react-native'
 
 class EventScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: navigation.state.params.event.name,
-    headerStyle: {
-      backgroundColor: '#e74c3c',
-    },
+
     headerTitleStyle: {
       color: 'white',
     },
     headerBackTitleStyle: {
       color: 'white'
     },
+    headerStyle: {
+      backgroundColor: '#e74c3c',
+      height: 85,
+    },
+    headerRight: (
+      <TouchableOpacity
+        onPress={() => {
+          const event = { ...navigation.state.params.event }
+          // Return early if 'Me' is already in the attendee list
+          if (event.attendees.some(attendee => attendee.name === 'Me'))
+            return
+
+          // Spread contents of current array into new array and add 'me' to the end
+          event['attendees'] = [...event.attendees, { name: 'Me' }]
+
+          // passing an object containing 'event' to `navigation.setParams`
+          // will set `props.navigation.state.params.event` to this new value,
+          // which we access within the render() function to display the list of names
+          navigation.setParams({
+            event,
+          })
+        }}
+        
+        style={{
+          height: 45,
+          width: 45,
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: 'rgba(250, 250, 250, 0.7)',
+          borderRadius: 50,
+          margin: 5,
+          shadowColor: 'black',
+          shadowOpacity: 0.5,
+          shadowOffset: {
+            width: 2,
+            height: 2,
+          }
+        }}
+        >
+          <Text style= {{ fontSize: 30, color: '#2980b9'}}>
+            ✌︎
+          </Text>
+        </TouchableOpacity>)
   })
 
 
@@ -27,7 +69,7 @@ class EventScreen extends Component {
       <View style={styles.container}>
         <Text style={styles.name}>{event.description}</Text>
         <View style={styles.attendees}>
-          <Text style={{fontWeight: 'bold', fontSize: 20}}>{'Who\'s going?'}</Text>
+          <Text style={{fontWeight: 'bold', fontSize: 20}}>{'Who\'s in?'}</Text>
           {event.attendees.map((person, i) => (<Text style={{fontSize: 15, marginTop: 5}} key={i}>{person.name}</Text>))}
         </View>
       </View>
