@@ -37,7 +37,6 @@ const transitionConfig = () => ({
       outputRange: [0, 1, 1],
     })
 
-    console.log('SCENEProPS', sceneProps)
     if (scenes[sceneProps.index].route.routeName === 'Home') return {  opacity }
     else return { transform: [{  translateY }] }
   },
@@ -48,7 +47,7 @@ const App = StackNavigator({
   Event: { screen: EventScreen },
 }, {
   initialRouteName: 'Home',
-  transitionConfig,
+  //transitionConfig,
 })
 
 export default App

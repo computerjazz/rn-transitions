@@ -20,10 +20,10 @@ const users = {
 }
 
 const events = [
-  { name: 'Monster Truck Rally', stars: 1, description: 'VROOM', attendees: [users.daniel, users.chris]},
-  { name: 'Cat Café', stars: 5, description: 'MEOW', attendees: [users.carlo, users.daniel] },
-  { name: 'Atomic Pinball', stars: 4, description: 'TILT', attendees: [users.chris, users.zack, users.carlo] },
-  { name: 'Breakdancing Museum', stars: 3, description: 'SPIN', attendees: [ users.zack, users.daniel] }
+  { name: 'Monster Truck Rally',description: 'VROOM', attendees: [users.daniel, users.chris]},
+  { name: 'Cat Café',  description: 'MEOW', attendees: [users.carlo, users.daniel, users.zack, users.chris] },
+  { name: 'Atomic Pinball', description: 'TILT', attendees: [users.chris, users.zack, users.carlo] },
+  { name: 'Breakdancing Museum', description: 'SPIN', attendees: [ users.zack, users.daniel] }
 ]
 
 class HomeScreen extends Component {
@@ -32,6 +32,7 @@ class HomeScreen extends Component {
     title: 'What to do today?',
     headerStyle: {
       backgroundColor: '#16a085',
+      height: 85,
     },
     headerTitleStyle: {
       color: 'white'
@@ -39,11 +40,12 @@ class HomeScreen extends Component {
     headerTruncatedBackTitle: 'Nah',
   }
 
+
   renderEventList(events = []){
     return events.map((event, i) => (
       <TouchableOpacity style={styles.event} key={i} onPress={() => this.props.navigation.navigate('Event', { event })}>
         <Text style={styles.eventText}>{event.name}</Text>
-        <Text style={styles.eventText}>{'✌︎ '.repeat(event.stars)}</Text>
+        <Text style={styles.eventText}>{'✌︎ '.repeat(event.attendees.length)}</Text>
       </TouchableOpacity>)
     )
   }
