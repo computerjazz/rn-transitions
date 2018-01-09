@@ -30,12 +30,18 @@ return {
       // Since we want the card to take the same amount of time
       // to animate downwards no matter if it's 3rd on the stack
       // or 53rd, we interpolate over the entire range from 0 - thisSceneIndex
-      const translateY = position.interpolate({
+      const resetY = position.interpolate({
         inputRange: [0, thisSceneIndex],
         outputRange: [height, 0]
       })
 
+      const translateY = position.interpolate({
+        inputRange: [thisSceneIndex - 1, thisSceneIndex],
+        outputRange: [height, 0]
+      })
+
       const slideFromRight = { transform: [{ translateX }] }
+      const resetFromBottom = { transform: [{ resetY }] }
       const slideFromBottom = { transform: [{ translateY }] }
 
       const lastSceneIndex = scenes[scenes.length - 1].index
@@ -47,6 +53,11 @@ return {
         // Hide all screens in between
         if (scene.index !== lastSceneIndex) return { opacity: 0 }
         // Slide top screen down
+        return resetFromBottom
+      }
+
+      // Animate downwards if screen has been dismissed via swipe gesture
+      if (scene.route.params && scene.route.params.swiped) {
         return slideFromBottom
       }
 
