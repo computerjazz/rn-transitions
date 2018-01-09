@@ -59,15 +59,21 @@ class GoScreen extends Component {
         // The most recent move distance is gestureState.move{X,Y}
         // The accumulated gesture distance since becoming responder is
         // gestureState.d{x,y}
-
-        // Make sure we don't fire off multiple gestures by using
-        // a `navInProgress` flag
-        if (gestureState.dy > 150 && !this.state.navInProgress) {
-          // swipe downward detected
-          this.setState({ navInProgress: true }, () => {
-            this.props.navigation.setParams({ swiped: true })
-          })
+        const { navigation } = this.props
+        const screenNumber = navigation.state.params ? navigation.state.params.screenNumber : 0
+        if (screenNumber > 0) {
+          // Make sure we don't fire off multiple gestures by using
+          // a `navInProgress` flag
+          this.setState({ screenMarginTop: gestureState.dy })
+          if (gestureState.dy > 150 && !this.state.navInProgress) {
+            // swipe downward detected
+            this.setState({ navInProgress: true }, () => {
+              navigation.setParams({ swiped: true })
+            })
+          }
         }
+
+
 
       },
       onPanResponderTerminationRequest: (evt, gestureState) => true,
@@ -112,7 +118,7 @@ class GoScreen extends Component {
     const screenNumber = navigation.state.params ? navigation.state.params.screenNumber : 0
     const backgroundColor = backgroundColors[screenNumber % backgroundColors.length]
     return (
-      <View style={[styles.container, { backgroundColor }]} {...this._panResponder.panHandlers}>
+      <View style={[styles.container, { backgroundColor, marginTop: this.state.screenMarginTop }]} {...this._panResponder.panHandlers}>
         <Text style={styles.jumbo}>{screenNumber}</Text>
         <TouchableOpacity onPress={this.goForward}><Text style={styles.textButton}>GO FORWARD!</Text></TouchableOpacity>
           <TouchableOpacity onPress={this.reset}><Text style={styles.textButton}>RESET!</Text></TouchableOpacity>

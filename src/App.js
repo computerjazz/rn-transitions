@@ -41,7 +41,7 @@ return {
       })
 
       const slideFromRight = { transform: [{ translateX }] }
-      const resetFromBottom = { transform: [{ resetY }] }
+      const resetFromBottom = { transform: [{ translateY: resetY }] }
       const slideFromBottom = { transform: [{ translateY }] }
 
       const lastSceneIndex = scenes[scenes.length - 1].index
@@ -72,6 +72,9 @@ const App = StackNavigator({
             }, {
           initialRouteName: 'Go',
           transitionConfig,
+          cardStyle: {
+            backgroundColor: 'transparent',
+         },
         })
 
 
